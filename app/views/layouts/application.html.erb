@@ -24,6 +24,12 @@
           <li><a href="/questions">Questions</a></li>
           <li><a href="/news">News</a></li>
           <li><a href="/contact">Contact</a></li>
+          <li>
+            <p><%= Time.now.hour.to_s + ":" + Time.now.min.to_s %></p>
+          </li>
+          <li>
+            <p><%= Time.now.to_date %></p>
+          </li>
         </ul>
       </nav>
 
