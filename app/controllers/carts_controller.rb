@@ -8,6 +8,7 @@ class CartsController < ApplicationController
 
   # GET /carts/1 or /carts/1.json
   def show
+    session[:counter] = 0
   end
 
   # GET /carts/new
