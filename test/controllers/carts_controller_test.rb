@@ -39,10 +39,36 @@ class CartsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy cart" do
-    assert_difference("Cart.count", -1) do
-      delete cart_url(@cart)
-    end
+    post line_items_url, params: { product_id: products(:ruby).id }
 
-    assert_redirected_to carts_url
+    unless session[:cart_id].nil?
+      @cart = Cart.find(session[:cart_id])
+
+      assert_difference("Cart.count", -1) do
+        delete cart_url(@cart)
+      end
+
+      assert_redirected_to store_index_url
+    end
+  end
+
+  test "adding two unique products to card" do
+    cart = Cart.new
+
+    cart.add_product(products(:ruby))
+    cart.add_product(products(:rails))
+
+    assert_equal 2, cart.line_items.size
+    assert_equal products(:ruby).price + products(:rails).price, cart.total_price
+  end
+
+  test "adding two duplicate products to card" do
+    cart = Cart.new
+
+    cart.add_product(products(:ruby))
+    cart.add_product(products(:ruby))
+
+    assert_equal 1, cart.line_items.size
+    assert_equal products(:ruby).price * 2, cart.total_price
   end
 end
